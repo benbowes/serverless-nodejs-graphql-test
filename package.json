@@ -1,0 +1,20 @@
+{
+  "name": "serverless-nodejs-graphql-test",
+  "version": "1.0.0",
+  "description": "Serverless NodeJS GraphQL Test",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"None setup yet\" && exit 0",
+    "deploy": "npm test && sls deploy",
+    "dev": "sls offline",
+    "makeFakeData": "node makeFakeData.js"
+  },
+  "dependencies": {
+    "graphql-yoga": "^1.18.3"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "faker": "^4.1.0",
+    "serverless-offline": "^6.3.0"
+  }
+}

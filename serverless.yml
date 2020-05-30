@@ -1,0 +1,27 @@
+service: graphql-lambda
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+functions:
+  graphql:
+    handler: handler.server
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true
+
+  playground:
+    handler: handler.playground
+    # environment:
+    #   SLS_DEBUG: true
+    events:
+      - http:
+          path: /
+          method: get
+          cors: true
