@@ -5,6 +5,18 @@ type Product {
   color: String
 }
 
+type QueryResponse {
+  products: [Product!]!
+  totalResults: Int!
+  start: Int!
+  count: Int!
+}
+
 type Query {
-  product(id: String, start: Int, end: Int): [Product!]!
+  product(
+    id: String
+    start: Int
+    count: Int
+    searchTerm: String
+  ): QueryResponse!
 }

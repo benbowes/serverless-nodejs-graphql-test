@@ -4,15 +4,27 @@
 
 #### Some example queries
 
+Note: `start` is zero based, whereas `count` is not zero based
+
+## Getting started locally
+
+`npm i && npm run dev`
+
 ```
 // Request a fragment of products
 
+
 query {
-    product(start: 2, end: 11) {
-        id
-        price
-        color
-        name
+    product(start:10, count: 10) {
+        totalResults
+        start
+        count
+        products {
+            id
+            color
+            name
+            price
+        }
     }
 }
 
@@ -24,10 +36,15 @@ query {
 
 query {
     product(id: "7") {
-        id
-        price
-        color
-        name
+        totalResults
+        start
+        count
+        products {
+            id
+            color
+            name
+            price
+        }
     }
 }
 
@@ -35,14 +52,39 @@ query {
 ```
 
 ```
+// Request via serach term
+
+query {
+    product(searchTerm: "chair", start: 3, count: 10) {
+        totalResults
+        start
+        count
+        products {
+            id
+            color
+            name
+            price
+        }
+    }
+}
+
+// Returns the products that matches on color or name begining at the 3rd result, up to ten results
+```
+
+```
 // Request all products
 
 query {
     product {
-        id
-        price
-        color
-        name
+        totalResults
+        start
+        count
+        products {
+            id
+            color
+            name
+            price
+        }
     }
 }
 

@@ -1,64 +1,127 @@
 module.exports = {
   Query: {
-    product: (_, data) => {
+    product: (_, { id, start, count, searchTerm }) => {
       const products = require("../fakeProducts.json");
-      const { id, start, end } = data;
 
-      /**
+      if (start !== undefined && count !== undefined && !id && !searchTerm) {
+        /**
        * Request fragment of products
        * @example query
-       * 
+       *
         query {
-          product(start: 2, end: 11) {
-            id
-            price
-            color
-            name
+          product(start:10, count: 10) {
+            totalResults
+            start
+            count
+            products {
+              id
+              color
+              name
+              price
+            }
           }
         }
       */
-      if (!id && start && end) {
-        return products.slice(data.start, data.end + 1);
+        return {
+          products: products.slice(start, count + start),
+          totalResults: products.length,
+          start,
+          count,
+        };
       }
 
-      /**
-       * Request one
+      if (id !== undefined) {
+        /**
+       * Request one product based on id
        * @example query
-       * 
+       *
         query {
           product(id: "7") {
-            id
-            price
-            color
-            name
+            totalResults
+            start
+            count
+            products {
+              id
+              color
+              name
+              price
+            }
           }
         }
       */
-      if (id) {
-        return products.filter((product) => product.id === data.id);
+        const found = products.filter((product) => product.id === id);
+        return {
+          products: found,
+          totalResults: found.length,
+          start: 0,
+          count: found.length,
+        };
+      }
+
+      if (searchTerm !== undefined) {
+        /**
+       * Request via serach term
+       * @example query
+       * @param {start} Int optional
+       * @param {count} int optional
+       *
+        query {
+          product(searchTerm: "chair", start:1, count: 3) {
+            totalResults
+            start
+            count
+            products {
+              id
+              color
+              name
+              price
+            }
+          }
+        }
+      */
+        const startFrom = start || 0;
+        const countTo = (count && count + startFrom) || 0;
+        const results = products.filter(
+          (product) =>
+            product.color.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        return {
+          products:
+            countTo === 0
+              ? results.slice(startFrom)
+              : results.slice(startFrom, countTo),
+          totalResults: results.length,
+          start: startFrom,
+          count: countTo,
+        };
       }
 
       /**
-       * Request all
+       * When no params, return everything
        * @example query
-       * 
+       *
         query {
           product {
-            id
-            price
-            color
-            name
+            totalResults
+            start
+            count
+            products {
+              id
+              color
+              name
+              price
+            }
           }
         }
-      */
-      if (!id && !start && !end) {
-        return products;
-      }
-
-      /**
-       * Incorrect usage of query params returns empty array
        */
-      return [];
+      return {
+        products,
+        totalResults: products.length,
+        start: 0,
+        count: products.length,
+      };
     },
   },
 };

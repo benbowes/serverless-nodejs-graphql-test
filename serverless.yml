@@ -19,8 +19,6 @@ functions:
 
   playground:
     handler: handler.playground
-    # environment:
-    #   SLS_DEBUG: true
     events:
       - http:
           path: /
