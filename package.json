@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"None setup yet\" && exit 0",
     "deploy": "npm test && sls deploy",
-    "dev": "sls offline",
+    "dev": "npm run makeFakeData && npx serverless offline",
     "makeFakeData": "node makeFakeData.js"
   },
   "dependencies": {
@@ -16,6 +16,6 @@
   "devDependencies": {
     "cross-env": "^7.0.2",
     "faker": "^4.1.0",
-    "serverless-offline": "^6.3.0"
+    "serverless-offline": "^6.8.0"
   }
 }
